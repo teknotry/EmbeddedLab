@@ -1,0 +1,926 @@
+
+rfid.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         000003ae  00000000  00000000  00000074  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000062  00800060  000003ae  00000422  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .debug_aranges 00000020  00000000  00000000  00000484  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  3 .debug_pubnames 0000007e  00000000  00000000  000004a4  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  4 .debug_info   00000b3d  00000000  00000000  00000522  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_abbrev 000001d9  00000000  00000000  0000105f  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_line   00000710  00000000  00000000  00001238  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_frame  00000090  00000000  00000000  00001948  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_str    00000125  00000000  00000000  000019d8  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_loc    00000459  00000000  00000000  00001afd  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_ranges 00000120  00000000  00000000  00001f56  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 2a 00 	jmp	0x54	; 0x54 <__ctors_end>
+   4:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+   8:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+   c:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  10:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  14:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  18:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  1c:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  20:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  24:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  28:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  2c:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  30:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  34:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  38:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  3c:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  40:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  44:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  48:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  4c:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  50:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+
+00000054 <__ctors_end>:
+  54:	11 24       	eor	r1, r1
+  56:	1f be       	out	0x3f, r1	; 63
+  58:	cf e5       	ldi	r28, 0x5F	; 95
+  5a:	d4 e0       	ldi	r29, 0x04	; 4
+  5c:	de bf       	out	0x3e, r29	; 62
+  5e:	cd bf       	out	0x3d, r28	; 61
+
+00000060 <__do_copy_data>:
+  60:	10 e0       	ldi	r17, 0x00	; 0
+  62:	a0 e6       	ldi	r26, 0x60	; 96
+  64:	b0 e0       	ldi	r27, 0x00	; 0
+  66:	ee ea       	ldi	r30, 0xAE	; 174
+  68:	f3 e0       	ldi	r31, 0x03	; 3
+  6a:	02 c0       	rjmp	.+4      	; 0x70 <.do_copy_data_start>
+
+0000006c <.do_copy_data_loop>:
+  6c:	05 90       	lpm	r0, Z+
+  6e:	0d 92       	st	X+, r0
+
+00000070 <.do_copy_data_start>:
+  70:	a2 3c       	cpi	r26, 0xC2	; 194
+  72:	b1 07       	cpc	r27, r17
+  74:	d9 f7       	brne	.-10     	; 0x6c <.do_copy_data_loop>
+  76:	0e 94 ec 00 	call	0x1d8	; 0x1d8 <main>
+  7a:	0c 94 d5 01 	jmp	0x3aa	; 0x3aa <_exit>
+
+0000007e <__bad_interrupt>:
+  7e:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+00000082 <wrcomm>:
+	wrcomm(0x01);//Cursor at line 1, position 1
+	wrcomm(0x80); //Shift Entire Display To Right
+}
+void wrcomm(unsigned char Command)
+{
+	cbi(PORTB,rs);
+  82:	c0 98       	cbi	0x18, 0	; 24
+	dataport = Command;
+  84:	8b bb       	out	0x1b, r24	; 27
+	sbi(PORTB,en);
+  86:	c2 9a       	sbi	0x18, 2	; 24
+    milliseconds can be achieved.
+ */
+void
+_delay_loop_2(uint16_t __count)
+{
+	__asm__ volatile (
+  88:	8a ef       	ldi	r24, 0xFA	; 250
+  8a:	90 e0       	ldi	r25, 0x00	; 0
+  8c:	fc 01       	movw	r30, r24
+  8e:	31 97       	sbiw	r30, 0x01	; 1
+  90:	f1 f7       	brne	.-4      	; 0x8e <wrcomm+0xc>
+	_delay_ms(1);
+	cbi(PORTB,en);
+  92:	c2 98       	cbi	0x18, 2	; 24
+  94:	01 97       	sbiw	r24, 0x01	; 1
+  96:	f1 f7       	brne	.-4      	; 0x94 <wrcomm+0x12>
+	_delay_ms(1); 
+}
+  98:	08 95       	ret
+
+0000009a <LCD_init>:
+	while (*string)
+	wrdata(*string++);
+}
+void LCD_init(void)
+{
+	wrcomm(0x38); //initialize LCD 2 lines, 5x7 matrix
+  9a:	88 e3       	ldi	r24, 0x38	; 56
+  9c:	90 e0       	ldi	r25, 0x00	; 0
+  9e:	0e 94 41 00 	call	0x82	; 0x82 <wrcomm>
+	wrcomm(0x06);//Clear LCD
+  a2:	86 e0       	ldi	r24, 0x06	; 6
+  a4:	90 e0       	ldi	r25, 0x00	; 0
+  a6:	0e 94 41 00 	call	0x82	; 0x82 <wrcomm>
+	wrcomm(0x0E); //Display on Cursor Blinking
+  aa:	8e e0       	ldi	r24, 0x0E	; 14
+  ac:	90 e0       	ldi	r25, 0x00	; 0
+  ae:	0e 94 41 00 	call	0x82	; 0x82 <wrcomm>
+	wrcomm(0x01);//Cursor at line 1, position 1
+  b2:	81 e0       	ldi	r24, 0x01	; 1
+  b4:	90 e0       	ldi	r25, 0x00	; 0
+  b6:	0e 94 41 00 	call	0x82	; 0x82 <wrcomm>
+	wrcomm(0x80); //Shift Entire Display To Right
+  ba:	80 e8       	ldi	r24, 0x80	; 128
+  bc:	90 e0       	ldi	r25, 0x00	; 0
+  be:	0e 94 41 00 	call	0x82	; 0x82 <wrcomm>
+}
+  c2:	08 95       	ret
+
+000000c4 <wrdata>:
+	cbi(PORTB,en);
+	_delay_ms(1); 
+}
+void wrdata(unsigned char Data)
+{
+	sbi(PORTB,rs);
+  c4:	c0 9a       	sbi	0x18, 0	; 24
+	dataport = Data;
+  c6:	8b bb       	out	0x1b, r24	; 27
+	sbi(PORTB,en);
+  c8:	c2 9a       	sbi	0x18, 2	; 24
+  ca:	8a ef       	ldi	r24, 0xFA	; 250
+  cc:	90 e0       	ldi	r25, 0x00	; 0
+  ce:	fc 01       	movw	r30, r24
+  d0:	31 97       	sbiw	r30, 0x01	; 1
+  d2:	f1 f7       	brne	.-4      	; 0xd0 <wrdata+0xc>
+	_delay_ms(1) ; 
+	cbi(PORTB,en); 
+  d4:	c2 98       	cbi	0x18, 2	; 24
+  d6:	01 97       	sbiw	r24, 0x01	; 1
+  d8:	f1 f7       	brne	.-4      	; 0xd6 <wrdata+0x12>
+	_delay_ms(1) ; 
+}
+  da:	08 95       	ret
+
+000000dc <LCD_DisplayString>:
+#define rw PB1
+#define en PB2
+#define dataport PORTA 
+
+void LCD_DisplayString (const unsigned char *string)
+{
+  dc:	cf 93       	push	r28
+  de:	df 93       	push	r29
+  e0:	ec 01       	movw	r28, r24
+  e2:	04 c0       	rjmp	.+8      	; 0xec <LCD_DisplayString+0x10>
+	//LCD_Cursor (row, column);
+	while (*string)
+	wrdata(*string++);
+  e4:	21 96       	adiw	r28, 0x01	; 1
+  e6:	90 e0       	ldi	r25, 0x00	; 0
+  e8:	0e 94 62 00 	call	0xc4	; 0xc4 <wrdata>
+#define dataport PORTA 
+
+void LCD_DisplayString (const unsigned char *string)
+{
+	//LCD_Cursor (row, column);
+	while (*string)
+  ec:	88 81       	ld	r24, Y
+  ee:	88 23       	and	r24, r24
+  f0:	c9 f7       	brne	.-14     	; 0xe4 <LCD_DisplayString+0x8>
+	wrdata(*string++);
+}
+  f2:	df 91       	pop	r29
+  f4:	cf 91       	pop	r28
+  f6:	08 95       	ret
+
+000000f8 <USART_Init>:
+
+
+void USART_Init( unsigned char ubrr)
+{
+	/* Set baud rate */
+	UBRRH = 0;
+  f8:	10 bc       	out	0x20, r1	; 32
+	UBRRL = ubrr;
+  fa:	89 b9       	out	0x09, r24	; 9
+
+	/* Enable receiver and transmitter */
+	UCSRB|= (1<<RXEN)|(1<<TXEN);
+  fc:	8a b1       	in	r24, 0x0a	; 10
+  fe:	88 61       	ori	r24, 0x18	; 24
+ 100:	8a b9       	out	0x0a, r24	; 10
+	/* Set frame format: 8data---ucsz0=1,ucsz1=1, 1stop bit ---usbs=0*/
+	UCSRC |= (1 << URSEL)|(3<<UCSZ0);
+ 102:	80 b5       	in	r24, 0x20	; 32
+ 104:	86 68       	ori	r24, 0x86	; 134
+ 106:	80 bd       	out	0x20, r24	; 32
+}
+ 108:	08 95       	ret
+
+0000010a <USART_Receive>:
+
+//RX
+unsigned char USART_Receive( void )
+{
+	/* Wait for data to be received */
+	while ( !(UCSRA & (1<<RXC)))
+ 10a:	5f 9b       	sbis	0x0b, 7	; 11
+ 10c:	fe cf       	rjmp	.-4      	; 0x10a <USART_Receive>
+	;
+	/* Get and return received data from buffer */
+	return UDR;
+ 10e:	8c b1       	in	r24, 0x0c	; 12
+}
+ 110:	08 95       	ret
+
+00000112 <DOOR>:
+
+
+void DOOR()
+{	 
+//DOOR OPEN
+PORTC=0B00001111;_delay_ms(50000);_delay_ms(20000);
+ 112:	8f e0       	ldi	r24, 0x0F	; 15
+ 114:	85 bb       	out	0x15, r24	; 21
+ 116:	8f ef       	ldi	r24, 0xFF	; 255
+ 118:	9f ef       	ldi	r25, 0xFF	; 255
+ 11a:	29 e1       	ldi	r18, 0x19	; 25
+ 11c:	30 e0       	ldi	r19, 0x00	; 0
+ 11e:	f9 01       	movw	r30, r18
+ 120:	31 97       	sbiw	r30, 0x01	; 1
+ 122:	f1 f7       	brne	.-4      	; 0x120 <DOOR+0xe>
+		__ticks = (uint16_t) (__ms * 10.0);
+		while(__ticks)
+		{
+			// wait 1/10 ms
+			_delay_loop_2(((F_CPU) / 4e3) / 10);
+			__ticks --;
+ 124:	01 97       	sbiw	r24, 0x01	; 1
+		__ticks = 1;
+	else if (__tmp > 65535)
+	{
+		//	__ticks = requested delay in 1/10 ms
+		__ticks = (uint16_t) (__ms * 10.0);
+		while(__ticks)
+ 126:	d9 f7       	brne	.-10     	; 0x11e <DOOR+0xc>
+ 128:	8f ef       	ldi	r24, 0xFF	; 255
+ 12a:	9f ef       	ldi	r25, 0xFF	; 255
+ 12c:	29 e1       	ldi	r18, 0x19	; 25
+ 12e:	30 e0       	ldi	r19, 0x00	; 0
+ 130:	f9 01       	movw	r30, r18
+ 132:	31 97       	sbiw	r30, 0x01	; 1
+ 134:	f1 f7       	brne	.-4      	; 0x132 <DOOR+0x20>
+		{
+			// wait 1/10 ms
+			_delay_loop_2(((F_CPU) / 4e3) / 10);
+			__ticks --;
+ 136:	01 97       	sbiw	r24, 0x01	; 1
+		__ticks = 1;
+	else if (__tmp > 65535)
+	{
+		//	__ticks = requested delay in 1/10 ms
+		__ticks = (uint16_t) (__ms * 10.0);
+		while(__ticks)
+ 138:	d9 f7       	brne	.-10     	; 0x130 <DOOR+0x1e>
+//STOP
+PORTC=0B11111111;_delay_ms(50000);_delay_ms(50000);_delay_ms(50000);
+ 13a:	8f ef       	ldi	r24, 0xFF	; 255
+ 13c:	85 bb       	out	0x15, r24	; 21
+ 13e:	8f ef       	ldi	r24, 0xFF	; 255
+ 140:	9f ef       	ldi	r25, 0xFF	; 255
+ 142:	29 e1       	ldi	r18, 0x19	; 25
+ 144:	30 e0       	ldi	r19, 0x00	; 0
+ 146:	f9 01       	movw	r30, r18
+ 148:	31 97       	sbiw	r30, 0x01	; 1
+ 14a:	f1 f7       	brne	.-4      	; 0x148 <DOOR+0x36>
+		{
+			// wait 1/10 ms
+			_delay_loop_2(((F_CPU) / 4e3) / 10);
+			__ticks --;
+ 14c:	01 97       	sbiw	r24, 0x01	; 1
+		__ticks = 1;
+	else if (__tmp > 65535)
+	{
+		//	__ticks = requested delay in 1/10 ms
+		__ticks = (uint16_t) (__ms * 10.0);
+		while(__ticks)
+ 14e:	d9 f7       	brne	.-10     	; 0x146 <DOOR+0x34>
+ 150:	8f ef       	ldi	r24, 0xFF	; 255
+ 152:	9f ef       	ldi	r25, 0xFF	; 255
+ 154:	29 e1       	ldi	r18, 0x19	; 25
+ 156:	30 e0       	ldi	r19, 0x00	; 0
+ 158:	f9 01       	movw	r30, r18
+ 15a:	31 97       	sbiw	r30, 0x01	; 1
+ 15c:	f1 f7       	brne	.-4      	; 0x15a <DOOR+0x48>
+		{
+			// wait 1/10 ms
+			_delay_loop_2(((F_CPU) / 4e3) / 10);
+			__ticks --;
+ 15e:	01 97       	sbiw	r24, 0x01	; 1
+		__ticks = 1;
+	else if (__tmp > 65535)
+	{
+		//	__ticks = requested delay in 1/10 ms
+		__ticks = (uint16_t) (__ms * 10.0);
+		while(__ticks)
+ 160:	d9 f7       	brne	.-10     	; 0x158 <DOOR+0x46>
+ 162:	8f ef       	ldi	r24, 0xFF	; 255
+ 164:	9f ef       	ldi	r25, 0xFF	; 255
+ 166:	29 e1       	ldi	r18, 0x19	; 25
+ 168:	30 e0       	ldi	r19, 0x00	; 0
+ 16a:	f9 01       	movw	r30, r18
+ 16c:	31 97       	sbiw	r30, 0x01	; 1
+ 16e:	f1 f7       	brne	.-4      	; 0x16c <DOOR+0x5a>
+		{
+			// wait 1/10 ms
+			_delay_loop_2(((F_CPU) / 4e3) / 10);
+			__ticks --;
+ 170:	01 97       	sbiw	r24, 0x01	; 1
+		__ticks = 1;
+	else if (__tmp > 65535)
+	{
+		//	__ticks = requested delay in 1/10 ms
+		__ticks = (uint16_t) (__ms * 10.0);
+		while(__ticks)
+ 172:	d9 f7       	brne	.-10     	; 0x16a <DOOR+0x58>
+//DOWN
+PORTC=0B11110000;_delay_ms(50000);_delay_ms(50000);
+ 174:	80 ef       	ldi	r24, 0xF0	; 240
+ 176:	85 bb       	out	0x15, r24	; 21
+ 178:	8f ef       	ldi	r24, 0xFF	; 255
+ 17a:	9f ef       	ldi	r25, 0xFF	; 255
+ 17c:	29 e1       	ldi	r18, 0x19	; 25
+ 17e:	30 e0       	ldi	r19, 0x00	; 0
+ 180:	f9 01       	movw	r30, r18
+ 182:	31 97       	sbiw	r30, 0x01	; 1
+ 184:	f1 f7       	brne	.-4      	; 0x182 <DOOR+0x70>
+		{
+			// wait 1/10 ms
+			_delay_loop_2(((F_CPU) / 4e3) / 10);
+			__ticks --;
+ 186:	01 97       	sbiw	r24, 0x01	; 1
+		__ticks = 1;
+	else if (__tmp > 65535)
+	{
+		//	__ticks = requested delay in 1/10 ms
+		__ticks = (uint16_t) (__ms * 10.0);
+		while(__ticks)
+ 188:	d9 f7       	brne	.-10     	; 0x180 <DOOR+0x6e>
+ 18a:	8f ef       	ldi	r24, 0xFF	; 255
+ 18c:	9f ef       	ldi	r25, 0xFF	; 255
+ 18e:	29 e1       	ldi	r18, 0x19	; 25
+ 190:	30 e0       	ldi	r19, 0x00	; 0
+ 192:	f9 01       	movw	r30, r18
+ 194:	31 97       	sbiw	r30, 0x01	; 1
+ 196:	f1 f7       	brne	.-4      	; 0x194 <DOOR+0x82>
+		{
+			// wait 1/10 ms
+			_delay_loop_2(((F_CPU) / 4e3) / 10);
+			__ticks --;
+ 198:	01 97       	sbiw	r24, 0x01	; 1
+		__ticks = 1;
+	else if (__tmp > 65535)
+	{
+		//	__ticks = requested delay in 1/10 ms
+		__ticks = (uint16_t) (__ms * 10.0);
+		while(__ticks)
+ 19a:	d9 f7       	brne	.-10     	; 0x192 <DOOR+0x80>
+//STOP
+PORTC=0B11111111;_delay_ms(50000);_delay_ms(50000);_delay_ms(50000);
+ 19c:	8f ef       	ldi	r24, 0xFF	; 255
+ 19e:	85 bb       	out	0x15, r24	; 21
+ 1a0:	8f ef       	ldi	r24, 0xFF	; 255
+ 1a2:	9f ef       	ldi	r25, 0xFF	; 255
+ 1a4:	29 e1       	ldi	r18, 0x19	; 25
+ 1a6:	30 e0       	ldi	r19, 0x00	; 0
+ 1a8:	f9 01       	movw	r30, r18
+ 1aa:	31 97       	sbiw	r30, 0x01	; 1
+ 1ac:	f1 f7       	brne	.-4      	; 0x1aa <DOOR+0x98>
+		{
+			// wait 1/10 ms
+			_delay_loop_2(((F_CPU) / 4e3) / 10);
+			__ticks --;
+ 1ae:	01 97       	sbiw	r24, 0x01	; 1
+		__ticks = 1;
+	else if (__tmp > 65535)
+	{
+		//	__ticks = requested delay in 1/10 ms
+		__ticks = (uint16_t) (__ms * 10.0);
+		while(__ticks)
+ 1b0:	d9 f7       	brne	.-10     	; 0x1a8 <DOOR+0x96>
+ 1b2:	8f ef       	ldi	r24, 0xFF	; 255
+ 1b4:	9f ef       	ldi	r25, 0xFF	; 255
+ 1b6:	29 e1       	ldi	r18, 0x19	; 25
+ 1b8:	30 e0       	ldi	r19, 0x00	; 0
+ 1ba:	f9 01       	movw	r30, r18
+ 1bc:	31 97       	sbiw	r30, 0x01	; 1
+ 1be:	f1 f7       	brne	.-4      	; 0x1bc <DOOR+0xaa>
+		{
+			// wait 1/10 ms
+			_delay_loop_2(((F_CPU) / 4e3) / 10);
+			__ticks --;
+ 1c0:	01 97       	sbiw	r24, 0x01	; 1
+		__ticks = 1;
+	else if (__tmp > 65535)
+	{
+		//	__ticks = requested delay in 1/10 ms
+		__ticks = (uint16_t) (__ms * 10.0);
+		while(__ticks)
+ 1c2:	d9 f7       	brne	.-10     	; 0x1ba <DOOR+0xa8>
+ 1c4:	8f ef       	ldi	r24, 0xFF	; 255
+ 1c6:	9f ef       	ldi	r25, 0xFF	; 255
+ 1c8:	29 e1       	ldi	r18, 0x19	; 25
+ 1ca:	30 e0       	ldi	r19, 0x00	; 0
+ 1cc:	f9 01       	movw	r30, r18
+ 1ce:	31 97       	sbiw	r30, 0x01	; 1
+ 1d0:	f1 f7       	brne	.-4      	; 0x1ce <DOOR+0xbc>
+		{
+			// wait 1/10 ms
+			_delay_loop_2(((F_CPU) / 4e3) / 10);
+			__ticks --;
+ 1d2:	01 97       	sbiw	r24, 0x01	; 1
+		__ticks = 1;
+	else if (__tmp > 65535)
+	{
+		//	__ticks = requested delay in 1/10 ms
+		__ticks = (uint16_t) (__ms * 10.0);
+		while(__ticks)
+ 1d4:	d9 f7       	brne	.-10     	; 0x1cc <DOOR+0xba>
+}
+ 1d6:	08 95       	ret
+
+000001d8 <main>:
+
+void main (void)
+{
+ 1d8:	2f 92       	push	r2
+ 1da:	3f 92       	push	r3
+ 1dc:	4f 92       	push	r4
+ 1de:	5f 92       	push	r5
+ 1e0:	6f 92       	push	r6
+ 1e2:	7f 92       	push	r7
+ 1e4:	8f 92       	push	r8
+ 1e6:	9f 92       	push	r9
+ 1e8:	af 92       	push	r10
+ 1ea:	bf 92       	push	r11
+ 1ec:	cf 92       	push	r12
+ 1ee:	df 92       	push	r13
+ 1f0:	ef 92       	push	r14
+ 1f2:	ff 92       	push	r15
+ 1f4:	0f 93       	push	r16
+ 1f6:	1f 93       	push	r17
+ 1f8:	df 93       	push	r29
+ 1fa:	cf 93       	push	r28
+ 1fc:	cd b7       	in	r28, 0x3d	; 61
+ 1fe:	de b7       	in	r29, 0x3e	; 62
+ 200:	2f 97       	sbiw	r28, 0x0f	; 15
+ 202:	0f b6       	in	r0, 0x3f	; 63
+ 204:	f8 94       	cli
+ 206:	de bf       	out	0x3e, r29	; 62
+ 208:	0f be       	out	0x3f, r0	; 63
+ 20a:	cd bf       	out	0x3d, r28	; 61
+	DDRA=0xFF;
+ 20c:	8f ef       	ldi	r24, 0xFF	; 255
+ 20e:	8a bb       	out	0x1a, r24	; 26
+	DDRB=0xFF;
+ 210:	87 bb       	out	0x17, r24	; 23
+	DDRC=0xFF;
+ 212:	84 bb       	out	0x14, r24	; 20
+	DDRD=0xFF;
+ 214:	81 bb       	out	0x11, r24	; 17
+	LCD_init();
+ 216:	0e 94 4d 00 	call	0x9a	; 0x9a <LCD_init>
+
+
+void USART_Init( unsigned char ubrr)
+{
+	/* Set baud rate */
+	UBRRH = 0;
+ 21a:	10 bc       	out	0x20, r1	; 32
+	UBRRL = ubrr;
+ 21c:	83 e3       	ldi	r24, 0x33	; 51
+ 21e:	89 b9       	out	0x09, r24	; 9
+
+	/* Enable receiver and transmitter */
+	UCSRB|= (1<<RXEN)|(1<<TXEN);
+ 220:	8a b1       	in	r24, 0x0a	; 10
+ 222:	88 61       	ori	r24, 0x18	; 24
+ 224:	8a b9       	out	0x0a, r24	; 10
+	/* Set frame format: 8data---ucsz0=1,ucsz1=1, 1stop bit ---usbs=0*/
+	UCSRC |= (1 << URSEL)|(3<<UCSZ0);
+ 226:	80 b5       	in	r24, 0x20	; 32
+ 228:	86 68       	ori	r24, 0x86	; 134
+ 22a:	80 bd       	out	0x20, r24	; 32
+ 22c:	84 ec       	ldi	r24, 0xC4	; 196
+ 22e:	99 e0       	ldi	r25, 0x09	; 9
+ 230:	01 97       	sbiw	r24, 0x01	; 1
+ 232:	f1 f7       	brne	.-4      	; 0x230 <main+0x58>
+	wrcomm(0x80); //Shift Entire Display To Right
+}
+void wrcomm(unsigned char Command)
+{
+	cbi(PORTB,rs);
+	dataport = Command;
+ 234:	50 e8       	ldi	r21, 0x80	; 128
+ 236:	75 2e       	mov	r7, r21
+ 238:	4a ef       	ldi	r20, 0xFA	; 250
+ 23a:	c4 2e       	mov	r12, r20
+ 23c:	d1 2c       	mov	r13, r1
+
+
+while(1) // Loop forever
+{	 
+	wrcomm(0x80);
+	LCD_DisplayString (" SWIPE UR CARD. ");
+ 23e:	2e 01       	movw	r4, r28
+ 240:	08 94       	sec
+ 242:	41 1c       	adc	r4, r1
+ 244:	51 1c       	adc	r5, r1
+   	
+	for (s=0;s<12;s++)
+ 246:	3d e0       	ldi	r19, 0x0D	; 13
+ 248:	23 2e       	mov	r2, r19
+ 24a:	31 2c       	mov	r3, r1
+ 24c:	2c 0e       	add	r2, r28
+ 24e:	3d 1e       	adc	r3, r29
+ 250:	29 e1       	ldi	r18, 0x19	; 25
+ 252:	82 2e       	mov	r8, r18
+ 254:	91 2c       	mov	r9, r1
+	wrcomm(0x80); //Shift Entire Display To Right
+}
+void wrcomm(unsigned char Command)
+{
+	cbi(PORTB,rs);
+	dataport = Command;
+ 256:	90 ec       	ldi	r25, 0xC0	; 192
+ 258:	69 2e       	mov	r6, r25
+ 25a:	8a ef       	ldi	r24, 0xFA	; 250
+ 25c:	a8 2e       	mov	r10, r24
+ 25e:	b1 2c       	mov	r11, r1
+	wrcomm(0x01);//Cursor at line 1, position 1
+	wrcomm(0x80); //Shift Entire Display To Right
+}
+void wrcomm(unsigned char Command)
+{
+	cbi(PORTB,rs);
+ 260:	c0 98       	cbi	0x18, 0	; 24
+	dataport = Command;
+ 262:	7b ba       	out	0x1b, r7	; 27
+	sbi(PORTB,en);
+ 264:	c2 9a       	sbi	0x18, 2	; 24
+ 266:	c6 01       	movw	r24, r12
+ 268:	01 97       	sbiw	r24, 0x01	; 1
+ 26a:	f1 f7       	brne	.-4      	; 0x268 <main+0x90>
+	_delay_ms(1);
+	cbi(PORTB,en);
+ 26c:	c2 98       	cbi	0x18, 2	; 24
+ 26e:	c6 01       	movw	r24, r12
+ 270:	01 97       	sbiw	r24, 0x01	; 1
+ 272:	f1 f7       	brne	.-4      	; 0x270 <main+0x98>
+
+
+while(1) // Loop forever
+{	 
+	wrcomm(0x80);
+	LCD_DisplayString (" SWIPE UR CARD. ");
+ 274:	80 e6       	ldi	r24, 0x60	; 96
+ 276:	90 e0       	ldi	r25, 0x00	; 0
+ 278:	0e 94 6e 00 	call	0xdc	; 0xdc <LCD_DisplayString>
+ 27c:	72 01       	movw	r14, r4
+ 27e:	82 01       	movw	r16, r4
+
+//RX
+unsigned char USART_Receive( void )
+{
+	/* Wait for data to be received */
+	while ( !(UCSRA & (1<<RXC)))
+ 280:	5f 9b       	sbis	0x0b, 7	; 11
+ 282:	fe cf       	rjmp	.-4      	; 0x280 <main+0xa8>
+	;
+	/* Get and return received data from buffer */
+	return UDR;
+ 284:	8c b1       	in	r24, 0x0c	; 12
+	wrcomm(0x80);
+	LCD_DisplayString (" SWIPE UR CARD. ");
+   	
+	for (s=0;s<12;s++)
+	{
+	arr[s]=USART_Receive();	
+ 286:	f8 01       	movw	r30, r16
+ 288:	81 93       	st	Z+, r24
+ 28a:	8f 01       	movw	r16, r30
+while(1) // Loop forever
+{	 
+	wrcomm(0x80);
+	LCD_DisplayString (" SWIPE UR CARD. ");
+   	
+	for (s=0;s<12;s++)
+ 28c:	e2 15       	cp	r30, r2
+ 28e:	f3 05       	cpc	r31, r3
+ 290:	b9 f7       	brne	.-18     	; 0x280 <main+0xa8>
+	{
+	arr[s]=USART_Receive();	
+	
+	}
+	LCD_init();
+ 292:	0e 94 4d 00 	call	0x9a	; 0x9a <LCD_init>
+ 296:	8f ef       	ldi	r24, 0xFF	; 255
+ 298:	9f ef       	ldi	r25, 0xFF	; 255
+ 29a:	f4 01       	movw	r30, r8
+ 29c:	31 97       	sbiw	r30, 0x01	; 1
+ 29e:	f1 f7       	brne	.-4      	; 0x29c <main+0xc4>
+		{
+			// wait 1/10 ms
+			_delay_loop_2(((F_CPU) / 4e3) / 10);
+			__ticks --;
+ 2a0:	01 97       	sbiw	r24, 0x01	; 1
+		__ticks = 1;
+	else if (__tmp > 65535)
+	{
+		//	__ticks = requested delay in 1/10 ms
+		__ticks = (uint16_t) (__ms * 10.0);
+		while(__ticks)
+ 2a2:	d9 f7       	brne	.-10     	; 0x29a <main+0xc2>
+	wrcomm(0x01);//Cursor at line 1, position 1
+	wrcomm(0x80); //Shift Entire Display To Right
+}
+void wrcomm(unsigned char Command)
+{
+	cbi(PORTB,rs);
+ 2a4:	c0 98       	cbi	0x18, 0	; 24
+	dataport = Command;
+ 2a6:	6b ba       	out	0x1b, r6	; 27
+	sbi(PORTB,en);
+ 2a8:	c2 9a       	sbi	0x18, 2	; 24
+ 2aa:	c6 01       	movw	r24, r12
+ 2ac:	01 97       	sbiw	r24, 0x01	; 1
+ 2ae:	f1 f7       	brne	.-4      	; 0x2ac <main+0xd4>
+	_delay_ms(1);
+	cbi(PORTB,en);
+ 2b0:	c2 98       	cbi	0x18, 2	; 24
+ 2b2:	c6 01       	movw	r24, r12
+ 2b4:	01 97       	sbiw	r24, 0x01	; 1
+ 2b6:	f1 f7       	brne	.-4      	; 0x2b4 <main+0xdc>
+	LCD_init();
+	_delay_ms(40000);
+		
+		wrcomm(0xc0);	
+		for (s=0;s<12;s++)
+   		wrdata(arr[s]);	
+ 2b8:	f7 01       	movw	r30, r14
+ 2ba:	81 91       	ld	r24, Z+
+ 2bc:	7f 01       	movw	r14, r30
+	cbi(PORTB,en);
+	_delay_ms(1); 
+}
+void wrdata(unsigned char Data)
+{
+	sbi(PORTB,rs);
+ 2be:	c0 9a       	sbi	0x18, 0	; 24
+	dataport = Data;
+ 2c0:	8b bb       	out	0x1b, r24	; 27
+	sbi(PORTB,en);
+ 2c2:	c2 9a       	sbi	0x18, 2	; 24
+ 2c4:	c6 01       	movw	r24, r12
+ 2c6:	01 97       	sbiw	r24, 0x01	; 1
+ 2c8:	f1 f7       	brne	.-4      	; 0x2c6 <main+0xee>
+	_delay_ms(1) ; 
+	cbi(PORTB,en); 
+ 2ca:	c2 98       	cbi	0x18, 2	; 24
+ 2cc:	c6 01       	movw	r24, r12
+ 2ce:	01 97       	sbiw	r24, 0x01	; 1
+ 2d0:	f1 f7       	brne	.-4      	; 0x2ce <main+0xf6>
+	}
+	LCD_init();
+	_delay_ms(40000);
+		
+		wrcomm(0xc0);	
+		for (s=0;s<12;s++)
+ 2d2:	e0 17       	cp	r30, r16
+ 2d4:	f1 07       	cpc	r31, r17
+ 2d6:	81 f7       	brne	.-32     	; 0x2b8 <main+0xe0>
+   		wrdata(arr[s]);	
+
+if(arr[10]=='F' && arr[11]=='E')		
+ 2d8:	8b 85       	ldd	r24, Y+11	; 0x0b
+ 2da:	86 34       	cpi	r24, 0x46	; 70
+ 2dc:	89 f4       	brne	.+34     	; 0x300 <main+0x128>
+ 2de:	8c 85       	ldd	r24, Y+12	; 0x0c
+ 2e0:	85 34       	cpi	r24, 0x45	; 69
+ 2e2:	09 f0       	breq	.+2      	; 0x2e6 <main+0x10e>
+ 2e4:	35 c0       	rjmp	.+106    	; 0x350 <main+0x178>
+	wrcomm(0x01);//Cursor at line 1, position 1
+	wrcomm(0x80); //Shift Entire Display To Right
+}
+void wrcomm(unsigned char Command)
+{
+	cbi(PORTB,rs);
+ 2e6:	c0 98       	cbi	0x18, 0	; 24
+	dataport = Command;
+ 2e8:	7b ba       	out	0x1b, r7	; 27
+	sbi(PORTB,en);
+ 2ea:	c2 9a       	sbi	0x18, 2	; 24
+ 2ec:	c5 01       	movw	r24, r10
+ 2ee:	01 97       	sbiw	r24, 0x01	; 1
+ 2f0:	f1 f7       	brne	.-4      	; 0x2ee <main+0x116>
+	_delay_ms(1);
+	cbi(PORTB,en);
+ 2f2:	c2 98       	cbi	0x18, 2	; 24
+ 2f4:	c5 01       	movw	r24, r10
+ 2f6:	01 97       	sbiw	r24, 0x01	; 1
+ 2f8:	f1 f7       	brne	.-4      	; 0x2f6 <main+0x11e>
+		for (s=0;s<12;s++)
+   		wrdata(arr[s]);	
+
+if(arr[10]=='F' && arr[11]=='E')		
+{	wrcomm(0x80);
+	LCD_DisplayString (" CARD 1 MANISH");
+ 2fa:	81 e7       	ldi	r24, 0x71	; 113
+ 2fc:	90 e0       	ldi	r25, 0x00	; 0
+ 2fe:	23 c0       	rjmp	.+70     	; 0x346 <main+0x16e>
+	DOOR();
+}
+else if(arr[10]=='E' && arr[11]=='4')		
+ 300:	85 34       	cpi	r24, 0x45	; 69
+ 302:	81 f4       	brne	.+32     	; 0x324 <main+0x14c>
+ 304:	8c 85       	ldd	r24, Y+12	; 0x0c
+ 306:	84 33       	cpi	r24, 0x34	; 52
+ 308:	19 f5       	brne	.+70     	; 0x350 <main+0x178>
+	wrcomm(0x01);//Cursor at line 1, position 1
+	wrcomm(0x80); //Shift Entire Display To Right
+}
+void wrcomm(unsigned char Command)
+{
+	cbi(PORTB,rs);
+ 30a:	c0 98       	cbi	0x18, 0	; 24
+	dataport = Command;
+ 30c:	7b ba       	out	0x1b, r7	; 27
+	sbi(PORTB,en);
+ 30e:	c2 9a       	sbi	0x18, 2	; 24
+ 310:	c5 01       	movw	r24, r10
+ 312:	01 97       	sbiw	r24, 0x01	; 1
+ 314:	f1 f7       	brne	.-4      	; 0x312 <main+0x13a>
+	_delay_ms(1);
+	cbi(PORTB,en);
+ 316:	c2 98       	cbi	0x18, 2	; 24
+ 318:	c5 01       	movw	r24, r10
+ 31a:	01 97       	sbiw	r24, 0x01	; 1
+ 31c:	f1 f7       	brne	.-4      	; 0x31a <main+0x142>
+	LCD_DisplayString (" CARD 1 MANISH");
+	DOOR();
+}
+else if(arr[10]=='E' && arr[11]=='4')		
+{	wrcomm(0x80);
+	LCD_DisplayString (" CARD 2 SHAYAN");
+ 31e:	80 e8       	ldi	r24, 0x80	; 128
+ 320:	90 e0       	ldi	r25, 0x00	; 0
+ 322:	11 c0       	rjmp	.+34     	; 0x346 <main+0x16e>
+	DOOR();
+}
+else if(arr[10]=='4' && arr[11]=='5')		
+ 324:	84 33       	cpi	r24, 0x34	; 52
+ 326:	a1 f4       	brne	.+40     	; 0x350 <main+0x178>
+ 328:	8c 85       	ldd	r24, Y+12	; 0x0c
+ 32a:	85 33       	cpi	r24, 0x35	; 53
+ 32c:	89 f4       	brne	.+34     	; 0x350 <main+0x178>
+	wrcomm(0x01);//Cursor at line 1, position 1
+	wrcomm(0x80); //Shift Entire Display To Right
+}
+void wrcomm(unsigned char Command)
+{
+	cbi(PORTB,rs);
+ 32e:	c0 98       	cbi	0x18, 0	; 24
+	dataport = Command;
+ 330:	7b ba       	out	0x1b, r7	; 27
+	sbi(PORTB,en);
+ 332:	c2 9a       	sbi	0x18, 2	; 24
+ 334:	c5 01       	movw	r24, r10
+ 336:	01 97       	sbiw	r24, 0x01	; 1
+ 338:	f1 f7       	brne	.-4      	; 0x336 <main+0x15e>
+	_delay_ms(1);
+	cbi(PORTB,en);
+ 33a:	c2 98       	cbi	0x18, 2	; 24
+ 33c:	c5 01       	movw	r24, r10
+ 33e:	01 97       	sbiw	r24, 0x01	; 1
+ 340:	f1 f7       	brne	.-4      	; 0x33e <main+0x166>
+	LCD_DisplayString (" CARD 2 SHAYAN");
+	DOOR();
+}
+else if(arr[10]=='4' && arr[11]=='5')		
+{	wrcomm(0x80);
+	LCD_DisplayString (" CARD 3 AVINASH");
+ 342:	8f e8       	ldi	r24, 0x8F	; 143
+ 344:	90 e0       	ldi	r25, 0x00	; 0
+ 346:	0e 94 6e 00 	call	0xdc	; 0xdc <LCD_DisplayString>
+	DOOR();
+ 34a:	0e 94 89 00 	call	0x112	; 0x112 <DOOR>
+ 34e:	1c c0       	rjmp	.+56     	; 0x388 <main+0x1b0>
+	wrcomm(0x01);//Cursor at line 1, position 1
+	wrcomm(0x80); //Shift Entire Display To Right
+}
+void wrcomm(unsigned char Command)
+{
+	cbi(PORTB,rs);
+ 350:	c0 98       	cbi	0x18, 0	; 24
+	dataport = Command;
+ 352:	7b ba       	out	0x1b, r7	; 27
+	sbi(PORTB,en);
+ 354:	c2 9a       	sbi	0x18, 2	; 24
+ 356:	c6 01       	movw	r24, r12
+ 358:	01 97       	sbiw	r24, 0x01	; 1
+ 35a:	f1 f7       	brne	.-4      	; 0x358 <main+0x180>
+	_delay_ms(1);
+	cbi(PORTB,en);
+ 35c:	c2 98       	cbi	0x18, 2	; 24
+ 35e:	c6 01       	movw	r24, r12
+ 360:	01 97       	sbiw	r24, 0x01	; 1
+ 362:	f1 f7       	brne	.-4      	; 0x360 <main+0x188>
+	LCD_DisplayString (" CARD 3 AVINASH");
+	DOOR();
+}
+else
+{	wrcomm(0x80);
+	LCD_DisplayString ("  ACCESS DENIED ");
+ 364:	8f e9       	ldi	r24, 0x9F	; 159
+ 366:	90 e0       	ldi	r25, 0x00	; 0
+ 368:	0e 94 6e 00 	call	0xdc	; 0xdc <LCD_DisplayString>
+	wrcomm(0x01);//Cursor at line 1, position 1
+	wrcomm(0x80); //Shift Entire Display To Right
+}
+void wrcomm(unsigned char Command)
+{
+	cbi(PORTB,rs);
+ 36c:	c0 98       	cbi	0x18, 0	; 24
+	dataport = Command;
+ 36e:	6b ba       	out	0x1b, r6	; 27
+	sbi(PORTB,en);
+ 370:	c2 9a       	sbi	0x18, 2	; 24
+ 372:	c6 01       	movw	r24, r12
+ 374:	01 97       	sbiw	r24, 0x01	; 1
+ 376:	f1 f7       	brne	.-4      	; 0x374 <main+0x19c>
+	_delay_ms(1);
+	cbi(PORTB,en);
+ 378:	c2 98       	cbi	0x18, 2	; 24
+ 37a:	c6 01       	movw	r24, r12
+ 37c:	01 97       	sbiw	r24, 0x01	; 1
+ 37e:	f1 f7       	brne	.-4      	; 0x37c <main+0x1a4>
+}
+else
+{	wrcomm(0x80);
+	LCD_DisplayString ("  ACCESS DENIED ");
+	wrcomm(0xC0);
+	LCD_DisplayString (" DEEPAK  SUMANT ");
+ 380:	80 eb       	ldi	r24, 0xB0	; 176
+ 382:	90 e0       	ldi	r25, 0x00	; 0
+ 384:	0e 94 6e 00 	call	0xdc	; 0xdc <LCD_DisplayString>
+ 388:	8f ef       	ldi	r24, 0xFF	; 255
+ 38a:	9f ef       	ldi	r25, 0xFF	; 255
+ 38c:	f4 01       	movw	r30, r8
+ 38e:	31 97       	sbiw	r30, 0x01	; 1
+ 390:	f1 f7       	brne	.-4      	; 0x38e <main+0x1b6>
+		{
+			// wait 1/10 ms
+			_delay_loop_2(((F_CPU) / 4e3) / 10);
+			__ticks --;
+ 392:	01 97       	sbiw	r24, 0x01	; 1
+		__ticks = 1;
+	else if (__tmp > 65535)
+	{
+		//	__ticks = requested delay in 1/10 ms
+		__ticks = (uint16_t) (__ms * 10.0);
+		while(__ticks)
+ 394:	d9 f7       	brne	.-10     	; 0x38c <main+0x1b4>
+}
+	_delay_ms(60000);LCD_init();_delay_ms(10000);
+ 396:	0e 94 4d 00 	call	0x9a	; 0x9a <LCD_init>
+ 39a:	8f ef       	ldi	r24, 0xFF	; 255
+ 39c:	9f ef       	ldi	r25, 0xFF	; 255
+ 39e:	f4 01       	movw	r30, r8
+ 3a0:	31 97       	sbiw	r30, 0x01	; 1
+ 3a2:	f1 f7       	brne	.-4      	; 0x3a0 <main+0x1c8>
+		{
+			// wait 1/10 ms
+			_delay_loop_2(((F_CPU) / 4e3) / 10);
+			__ticks --;
+ 3a4:	01 97       	sbiw	r24, 0x01	; 1
+		__ticks = 1;
+	else if (__tmp > 65535)
+	{
+		//	__ticks = requested delay in 1/10 ms
+		__ticks = (uint16_t) (__ms * 10.0);
+		while(__ticks)
+ 3a6:	d9 f7       	brne	.-10     	; 0x39e <main+0x1c6>
+ 3a8:	5b cf       	rjmp	.-330    	; 0x260 <main+0x88>
+
+000003aa <_exit>:
+ 3aa:	f8 94       	cli
+
+000003ac <__stop_program>:
+ 3ac:	ff cf       	rjmp	.-2      	; 0x3ac <__stop_program>
