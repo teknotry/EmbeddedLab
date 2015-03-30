@@ -117,24 +117,22 @@ while(1) // Loop forever
 
 if(arr[10]=='F' && arr[11]=='E')		
 {	wrcomm(0x80);
-	LCD_DisplayString (" CARD 1 MANISH");
+	LCD_DisplayString (" CARD 1");
 	DOOR();
 }
 else if(arr[10]=='E' && arr[11]=='4')		
 {	wrcomm(0x80);
-	LCD_DisplayString (" CARD 2 SHAYAN");
+	LCD_DisplayString (" CARD 2");
 	DOOR();
 }
 else if(arr[10]=='4' && arr[11]=='5')		
 {	wrcomm(0x80);
-	LCD_DisplayString (" CARD 3 AVINASH");
+	LCD_DisplayString (" CARD 3");
 	DOOR();
 }
 else
 {	wrcomm(0x80);
 	LCD_DisplayString ("  ACCESS DENIED ");
-	wrcomm(0xC0);
-	LCD_DisplayString (" DEEPAK  SUMANT ");
 }
 	_delay_ms(60000);LCD_init();_delay_ms(10000);
 }
